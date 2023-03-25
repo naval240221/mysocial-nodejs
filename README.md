@@ -20,21 +20,23 @@ This is quick start guide to setup and run the mysocial app
 - Run command `npm test`
 - Should pass all the tests
 
-# Api Endpoints
+# Api Method Description
 
-## Signup
+### `POST /user`
+Create a new user, Password should be minimum of 8 characters
+
+#### request
 ```
-Method: POST
-Api-Enpoint: /user
-Sample Payload
 {
   "firstname": "Naval",
   "lastname": "Kumawat"
   "email": "naval@mailinator.com",
   "password": "admin@123"
 }
+```
 
-Response [200]:
+#### Response [200]
+```
 {
     "firstname": "Naval",
     "lastname": "Kumawat",
@@ -43,28 +45,28 @@ Response [200]:
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoie1wiZmlyc3RuYW1lXCI6XCJOYXZhbFwiLFwibGFzdG5hbWVcIjpcIkt1bWF3YXRcIixcImVtYWlsXCI6XCJuYXZhbDVAbWFpbGluYXRvci5jb21cIixcIl9fdlwiOjAsXCJpZFwiOlwiNjQxZjEyMTIyOTVkMTlkMDJmZDZjNDc4XCJ9IiwiaWF0IjoxNjc5NzU3ODQzLCJleHAiOjE2Nzk3NTg0NDN9.3yyVFnGNMJTjZTu0rZcHTzsQM3HB9o9Wd-20b1tPskA",
     "id": "641f1212295d19d02fd6c478"
 }
+```
 
-Response [400]
+#### Response [400]
+```
 If one of these fields are missing email, firstname, lastname, password
 Error Message: Please provide all the input details
-
-Response [409]
-If already exist a user with the same email
-Error Message: User already exist. Please proceed with login.
-
 ```
 
-## Login
+### `POST /login`
+
+Login at the platform
+
+#### Request
 ```
-Method: POST
-Api-Enpoint: /login
-Sample Payload
 {
   "email": "naval@mailinator.com",
   "password": "admin@123"
 }
+```
 
-Response [200]
+#### Response [200]
+```
 {
     "firstname": "Naval",
     "lastname": "Kumawat",
@@ -73,24 +75,23 @@ Response [200]
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoie1wiZmlyc3RuYW1lXCI6XCJOYXZhbFwiLFwibGFzdG5hbWVcIjpcIkt1bWF3YXRcIixcImVtYWlsXCI6XCJuYXZhbDNAbWFpbGluYXRvci5jb21cIixcIl9fdlwiOjAsXCJpZFwiOlwiNjQxZWZmYWJiMmQwMmUwMzQyNTgwZWFmXCJ9IiwiaWF0IjoxNjc5NzU3OTQ4LCJleHAiOjE2Nzk3NTg1NDh9.K0JfRKyzur1X6NDI208i0xB86cpr6hbXKo8XQNrpEcI",
     "id": "641effabb2d02e0342580eaf"
 }
+```
 
-Response [400]
+#### Response [400]
 If one of these fields are missing email, password
 Error Message: Please provide all the input details
 
-Response [404]
+#### Response [404]
 If password does not match
 Error Message: Incorrect email or password
 
-```
+### `GET /user`
 
-## Get Users
-```
-Method: GET
-Api-Enpoint: /user
+Get all users, Supports pagination and query params to filter users
 
-Response [200]:
-Response Body = {
+#### Response [200]
+```
+{
   "users": [{
     "firstname": "Naval",
     "lastname": "Kumawat",
@@ -100,18 +101,20 @@ Response Body = {
   }],
   "total": 1
 }
+```
 
-Response [404]:
+#### Response [404]
+```
 Error Message: "No user exists"
 ```
 
-## Get User Details
-```
-Method: GET
-Api-Endpoint: /user/:id
+### `GET /user/:id`
 
-Response [200]:
-Response Body = {
+Get a user details along with todos, posts
+
+#### Response [200]
+```
+{
   "firstname": "Naval",
   "lastname": "Kumawat",
   "email": "naval5@mailinator.com",
@@ -122,17 +125,19 @@ Response Body = {
 }
 ```
 
-## Create A ToDo
+### `POST /todos`
+
+Create a todo.
+
+#### request
 ```
-Method: POST
-Api-Enpoint: /todos
-Sample Payload
 {
   "task": "Sample TODO Added"
 }
+```
 
-Response [200]
-Sample Response
+#### Response [200]
+```
 {
    "id":"641f013db2d02e0342580eb7",
    "task":"Sample TODO Added",
@@ -140,27 +145,33 @@ Sample Response
    "completed": false,
    "__v":"0"
 }
+```
 
-Sample Payload 2
+#### request2
+```
 {
   "text": "Sample Data"
 }
-Response [400]
+```
+#### Response [400]
+```
 Error Text: TODO can not be created with empty content
 
 ```
 
-## Update a TODO
+### `PUT /todos/:id`
+
+Update a todo title/task, user who have created the todo only can perform this action
+
+#### request
 ```
-Method: PUT
-Api-Enpoint: /todos/:id
-Sample Payload
 {
   "task": "Sample TODO Updated"
 }
+```
 
-Response [200]
-Sample Response
+#### Response [200]
+```
 {
    "id":"641f013db2d0e0342580eb7",
    "task":"Sample TODO Updated",
@@ -171,24 +182,229 @@ Sample Response
 
 ```
 
-## Delete a TODO
-```
-Method: Delete
-Api-Enpoint: /todos/:id
+### `DELETE /todos/:id`
 
-Response [200]
-Sample Response
+Delete a Todo, User who have created the todo will only be able to delete the todo
+
+#### Response [200]
+```
 Todo deleted successfully
 
 ```
 
-## Mark TODO As Complete
+### `POST /todos/:id`
+
+Mark a todo as completed succesfully, user who have created the todo only can mark it as completed
+
+#### Response [200]
 ```
-Method: POST
-Api-Enpoint: /todos/:id
+Task marked as completed successfully
+```
 
-Response [200]
-Sample Response
-"Task marked as completed successfully"
+### `GET /todos`
 
+#### response [200]
+```
+{
+  "tasks": [{
+     "id":"641f013db2d0e0342580eb7",
+     "task":"Sample TODO Updated",
+     "user": {
+        "firstname": "Naval",
+        "lastname": "Kumawat",
+        "email": "naval@mailinator.com"
+     },
+     "completed": false,
+     "__v":"0"
+  }],
+  "totalCount": 1,
+  "skip": 1
+}
+```
+
+#### Available Query Params
+```
+skip: int,
+limit: int,
+sort: {'createdAt': 'desc'} // Object
+user: string || Array
+createdAt: {'$gte': "2023-03-22"}
+completed: bool [true/false]
+```
+
+### `POST /posts`
+Create post, only text is required
+
+#### request
+{
+  "content": "Sample Post"
+}
+
+#### Response [200]
+```
+{
+   "id":"641f013db2d02e0342580eb7",
+   "content":"Sample Post Added",
+   "user": "641efdf0e2509646d4eacd94",
+   "comments": [],
+   "__v":"0"
+}
+```
+
+### `GET /posts`
+
+Get Posts with latest 5 comments with each post. Supports pagination, Per page limit is 50, Every user can access to other user's post
+
+#### Response [200]
+```
+{
+  "posts": [{
+     "id":"641f013db2d02e0342580eb7",
+     "content":"Sample Post Added",
+     "user": {
+        "firstname": "Naval",
+        "lastname": "Kumawat",
+        "email": "naval@mailinator.com"
+     },
+     "comments": [],
+     "__v":"0"
+  }, {
+     "id":"641f013db2d02e0342580eb7",
+     "content":"Sample Post Added",
+     "user": {
+        "firstname": "Naval 1",
+        "lastname": "Kumawat",
+        "email": "naval2@mailinator.com"
+     },
+     "comments": [],
+     "__v":"0"
+  }],
+  "skip": 2,
+  "totalCount": 2
+}
+```
+#### query params
+```
+skip: int,
+limit: int,
+sort: {'createdAt': 'desc'} // Object
+user: string || Array
+createdAt: {'$gte': "2023-03-22"}
+```
+
+### `PUT /posts/:id`
+Update a post's content, user who have created the post only can perform this action
+
+#### request
+```
+{
+  "content": "Sample Post Updated"
+}
+```
+
+#### Response [200]
+```
+{
+   "id":"641f013db2d02e0342580eb7",
+   "content":"Sample Post Updated",
+   "user": "641efdf0e2509646d4eacd94",
+   "comments": [],
+   "__v":"0"
+}
+```
+
+### `DELETE /posts/:id`
+
+Delete a post, User who have created the post will only be able to delete the post
+
+#### Response [200]
+```
+Post deleted successfully
+```
+
+### `GET /posts/:id`
+Get a specific post along with comments, all comments sorted in asceding order
+
+#### Response [200]
+```
+{
+   "id":"641f013db2d02e0342580eb7",
+   "content":"Sample Post Updated",
+   "user": {
+      "firstname": "Naval",
+      "lastname": "Kumawat",
+      "email": "naval@mailinator.com"
+   },
+   "comments": [],
+   "__v":"0"
+}
+```
+
+### `POST /posts/:id/comments`
+
+Add comment to a post, any user can add comment to any post, only content is required
+
+#### request
+```
+{
+  "content": "Sample Comment Added"
+}
+```
+
+#### Response [200]
+```
+{
+   "id":"641f03b9c0ab28dbd2f603f1",
+   "content": "Sample Comment Added",
+   "post": "641f009eb2d02e0342580eb5",
+   "addedBy": "641effabb2d02e0342580eaf",
+   "__v": 0
+}
+```
+
+### `DELETE /posts/:id/comments`
+
+Delete a comment from a post, User can only delete comment added by themselves
+
+#### Response [200]
+```
+Comment deleted successfully
+```
+
+#### Response [400]
+```
+You can delete only your added comments.
+```
+
+### `GET /posts/:id/comments`
+
+Get all comments related to a post, Support query params can fetch comments added by a specific user
+
+#### Response [200]
+```
+{
+  "comments": [{
+     "id":"641f03b9c0ab28dbd2f603f1",
+     "content": "Sample Comment Added",
+     "post": "641f009eb2d02e0342580eb5",
+     "addedBy": {
+        "firstname": "Naval",
+        "lastname": "Kumawat",
+        "email": "naval@mailinator.com"
+     },
+     "__v": 0
+  }, {
+     "id":"641f03b9c0ab28dbd2f603f1",
+     "content": "Sample Comment Added New",
+     "post": "641f009eb2d02e0342580eb5",
+     "addedBy": {
+        "firstname": "Naval 2",
+        "lastname": "Kumawat",
+        "email": "naval2@mailinator.com"
+     },
+     "__v": 0
+  }],
+  "skip": 2,
+  "totalCount": 2
+}
 ```
