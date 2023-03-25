@@ -89,6 +89,9 @@ Error Message: Please provide all the input details
 If password does not match
 Error Message: Incorrect email or password
 
+#### Notes
+- A user will be temporary susepended for accessing the account if he/she makes 11 consecutive unsuccefull attempts in 6 hours.
+
 ### `GET /user`
 
 Get all users, Supports pagination and query params to filter users
