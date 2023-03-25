@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const rateLimit = require("express-rate-limit");
 
 const routes = require('./routes')
 
@@ -16,6 +17,15 @@ const server = express();
 server.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html')
 })
+
+server.use(rateLimit({
+    windowMs: 2 * 60 * 1000, // 5 minutes duration
+    max: 100,
+    message: "You have exceeded the 100 requests in 2 minutes limit",
+    standardHeaders: true,
+    legacyHeaders: false
+}))
+
 // adding Helmet to enhance your Rest API's security
 server.use(helmet());
 
