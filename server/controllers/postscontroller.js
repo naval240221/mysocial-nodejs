@@ -94,7 +94,7 @@ const updatePost = async (req, res) => {
             deleted: {'$ne': true}
         });
         if (!postExist) {
-            res.status(401).send("Post you are trying to delete either does not exist or has been deleted.");
+            res.status(401).send("Post you are trying to update either does not exist or has been deleted.");
             return
         }
         if (postExist && postExist.user.toString() != userDoc.id.toString()) {
