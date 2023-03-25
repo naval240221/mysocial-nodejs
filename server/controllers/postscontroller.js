@@ -227,7 +227,7 @@ const createComment = async (req, res) => {
             deleted: {'$ne': true}
         });
         if (!postExist) {
-            res.status(401).send("Post you are trying to delete either does not exist or has been deleted.");
+            res.status(401).send("Post does not exist in which you are trying to add a comment.");
             return
         }
         let commentData = Object.assign({}, body);
