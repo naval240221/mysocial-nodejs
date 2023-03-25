@@ -12,7 +12,11 @@ This is quick start guide to setup and run the mysocial app
 # Setup
 - Clone the repo
 - Go to folder `mysocial-nodejs` and run command `npm install` to install all dependencies
-- `npm run test` from this directory
+- create a .env file in this folder and mention two different env variables
+  - MONGO_URI uri path to connect to database
+  - MONGO_TEST_URI uri path to connect to test databse (Used for test cases)
+  - API_PORT port on which the service should run 8080
+- `npm run dev` from this directory
 - Your server should be running on `http://localhost:8080`
 
 # To Run the tests
