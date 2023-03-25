@@ -75,13 +75,43 @@ const loginUser = async (req, res) => {
             res.status(404).send("User does not exist with these details.");
             return
         }
+        // If user have made 10 incorrectAttempt with password then do not let him
+        // proceed further for atleast 6 hours
+        if (userExist.temporaryBlocked) {
+            res.status(403).send("You have made 10 consecutive unsuccesfull attempts in last 6 hours. You account has been temporary disabled")
+            return
+        }
         const isValidPassword = await bcrypt.compare(password, userExist.password);
         if (!isValidPassword) {
+            let updateQuery = {}
+            updateQuery['$inc'] = {'incorrectAttempt': 1}
+            if (!userExist.incorrectAttempt) {
+                updateQuery['$set'] = {'firstIncorrectAttemptAt': new Date()}
+            } else {
+                let now = new Date()
+                let delta = Math.abs(now.getTime() - userExist.firstIncorrectAttemptAt.getTime()) / 1000;
+                delta /= (60 * 60)
+                if (parseInt(delta) < 6 && userExist.incorrectAttempt == 10) {
+                    updateQuery['$set'] = {
+                        "temporaryBlocked": true
+                    }
+                }
+            }
+            await User.updateOne({
+                _id: new ObjectId(userExist._id)
+            }, updateQuery)
             res.status(401).send("Incorrect email or password");
             return
         }
         if (userExist && isValidPassword) {
             // Create token
+            await User.updateOne({
+                _id: new ObjectId(userExist._id)
+            }, {
+                "$unset": {'incorrectAttempt': 0, 'firstIncorrectAttemptAt': 0}
+            })
+            delete userExist.incorrectAttempt;
+            delete userExist.firstIncorrectAttemptAt;
             const authToken = Authentication.generateAuthToken(userExist);
             const refreshToken = Authentication.generateRefreshToken(userExist);
             // Assigning refresh token in http-only cookie 

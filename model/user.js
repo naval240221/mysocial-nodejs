@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true , set: v => v.toLowerCase()},
   password: { type: String, required: true },
   token: { type: String },
+  incorrectAttempt: { type: Number },
+  firstIncorrectAttemptAt: { type: Date },
+  temporaryBlocked: { type: Boolean },
   createdAt: {type: Date}
 }, {
     id: true,
@@ -17,6 +20,7 @@ const userSchema = new mongoose.Schema({
             ret.id = ret.id.toString();
             delete ret._id
             delete ret.password;
+            delete ret.firstIncorrectAttemptAt;
         }
     }
 });
