@@ -108,6 +108,17 @@ const getUsers = async (req, res) => {
                 return value
             })
         }
+        // Support get user via email, firstname or lastname
+        _.map(['firstname', 'lastname'], function(v) {
+            if (query[v])   {
+                userquery[v] = {
+                    '$regex': new RegExp(query[v], 'i')
+                }
+            }
+        })
+        if (query.email) {
+            userquery.email = query.email
+        }
         let limit = parseInt(query.limit) || 10;
         let skip = parseInt(query.skip) || 0;
         let sort = query.sort || {'createdAt': 'asc'};
