@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
             ret.id = doc._id;
             ret.id = ret.id.toString();
             delete ret._id
+            delete ret.password;
         }
     }
 });
