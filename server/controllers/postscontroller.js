@@ -324,7 +324,7 @@ const fetchAllComments = async (req, res) => {
         }
         // If want to fetch posts for a specific user
         if (query.user) {
-            commentsQuery.user = new ObjectId(query.user)
+            commentsQuery.addedBy = new ObjectId(query.user)
         }
         // Return posts after a specific date or in a daterange
         if (query.createdAt && !_.isEmpty(query.createdAt)) {
