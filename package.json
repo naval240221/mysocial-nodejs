@@ -16,21 +16,25 @@
     "assert": "^2.0.0",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
-    "mongoose": "^7.0.3"
+    "mongoose": "^7.0.3",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22",
     "babel-jest": "^24.9.0",
-    "bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.0",
     "crypto-js": "3.1.9-1",
     "eslint": "^8.11.0",
     "jest": "^27.5.1",
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22",
     "prettier": "^2.6.0",
     "pretty-quick": "^3.1.3",
+    "jsonwebtoken": "^9.0.0",
     "supertest": "^4.0.2"
   }
 }

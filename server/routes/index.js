@@ -26,7 +26,9 @@ router
     .route('/user/:id')
     .get(auth, user.getUserDetails)
 
-
+router
+    .route('/refresh')
+    .get(user.refreshAccessToken)
 /**
  * All API Routes related to create post
  * Add comment to it

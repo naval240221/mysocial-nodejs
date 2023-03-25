@@ -40,6 +40,11 @@ const registerUser = async (req, res) => {
         })
         // Create token
         const authToken = Authentication.generateAuthToken(user);
+        const refreshToken = Authentication.generateRefreshToken(user);
+        // Assigning refresh token in http-only cookie 
+        res.cookie('jwt', refreshToken, { httpOnly: true, 
+            sameSite: 'None', secure: true, 
+            maxAge: 24 * 60 * 60 * 1000 });
         // save user token
         user.token = authToken;
         // return new user
@@ -78,6 +83,11 @@ const loginUser = async (req, res) => {
         if (userExist && isValidPassword) {
             // Create token
             const authToken = Authentication.generateAuthToken(userExist);
+            const refreshToken = Authentication.generateRefreshToken(userExist);
+            // Assigning refresh token in http-only cookie 
+            res.cookie('jwt', refreshToken, { httpOnly: true, 
+                sameSite: 'None', secure: true, 
+                maxAge: 24 * 60 * 60 * 1000 });
             // save user token
             userExist.token = authToken;
             // return user document
@@ -89,6 +99,34 @@ const loginUser = async (req, res) => {
         res.status(500).send(err);
     }
 };
+
+
+/**
+ * Api endpoint to refresh access token
+ * @param {*} req 
+ * @param {*} res 
+ */
+const refreshAccessToken = async (req, res) => {
+    try {
+        if (req.cookie?.jwt) {
+            // Destructuring refreshToken from cookie
+            const refreshToken = req.cookies.jwt;
+            const deconstructedUser = Authentication.extractUserForRefreshToken(refreshToken);
+            if (deconstructedUser && deconstructedUser.id) {
+                return res.status(200).send({
+                    token: Authentication.generateAuthToken(userExist)
+                })
+            } else {
+                return res.status(406).json({ message: 'Unauthorized' });
+            }
+        } else {
+            return res.status(406).json({ message: 'Unauthorized' });
+        }
+    } catch (err) {
+        res.status(500).send(err)
+    }
+}
+
 
 const getUsers = async (req, res) => {
     try {
@@ -177,4 +215,4 @@ const getUserDetails = async (req, res) => {
     }
 };
 
-module.exports = {registerUser, loginUser, getUsers, getUserDetails};
+module.exports = {registerUser, loginUser, getUsers, getUserDetails, refreshAccessToken};
