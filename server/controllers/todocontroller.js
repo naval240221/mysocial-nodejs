@@ -174,7 +174,10 @@ const fetchTasks = async (req, res) => {
         }
         let limit = parseInt(query.limit) || 10;
         let skip = parseInt(query.skip) || 0;
-        let sort = query.sort || {'createdAt': 'asc'};;
+        let sort = query.sort || {'createdAt': 'asc'};
+        if (typeof sort === 'string') {
+            sort = JSON.parse(sort);
+        }
         if (query.user) {
             let userData = (query.user.startsWith('[')) ? JSON.parse(query.user) : query.user;
             taskquery.user = (Array.isArray(userData)) ? {'$in': userData.map(element => {

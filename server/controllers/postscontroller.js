@@ -132,7 +132,10 @@ const fetchPosts = async (req, res) => {
         // By Default return 50 posts with every post
         let limit = parseInt(query.limit) || 50;
         let skip = parseInt(query.skip) || 0;
-        let sort = query.sort || {'createdAt': 'asc'};;
+        let sort = query.sort || {'createdAt': 'asc'};
+        if (typeof sort === 'string') {
+            sort = JSON.parse(sort);
+        }
         // const userDoc = res.locals.userdoc;
         let postQuery = {
             deleted: {'$ne': true}
@@ -310,7 +313,10 @@ const fetchAllComments = async (req, res) => {
         // By Default return 50 posts with every post
         let limit = parseInt(query.limit) || 50;
         let skip = parseInt(query.skip) || 0;
-        let sort = query.sort || {'createdAt': 'asc'};;
+        let sort = query.sort || {'createdAt': 'asc'};
+        if (typeof sort === 'string') {
+            sort = JSON.parse(sort);
+        }
         // const userDoc = res.locals.userdoc;
         let commentsQuery = {
             deleted: {'$ne': true},
@@ -330,7 +336,7 @@ const fetchAllComments = async (req, res) => {
                 return value
             })
         }
-        const commentsData = await Comments.find(commentsQuery).skip(skip).limit(limit).sort(sort).populate(
+        const commentsData = await Comments.find(commentsQuery).sort(sort).skip(skip).limit(limit).populate(
             'addedBy', 'firstname lastname email'
         );
         const totalComments = await Comments.count(commentsQuery)

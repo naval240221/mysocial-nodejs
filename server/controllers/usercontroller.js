@@ -160,6 +160,9 @@ const getUsers = async (req, res) => {
         let limit = parseInt(query.limit) || 10;
         let skip = parseInt(query.skip) || 0;
         let sort = query.sort || {'createdAt': 'asc'};
+        if (typeof sort === 'string') {
+            sort = JSON.parse(sort);
+        }
         const users = await User.find(
             userquery, {firstname: 1, lastname: 1, email: 1}
         ).skip(skip).limit(limit).sort(sort)
