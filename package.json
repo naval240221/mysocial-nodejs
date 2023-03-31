@@ -9,7 +9,7 @@
     "dev": "nodemon index.js",
     "test": "NODE_ENV=test jest --detectOpenHandles --forceExit --passWithNoTests --testTimeout=5000"
   },
-  "keywords": ["node.js", 'express', 'mongodb', 'restapi'],
+  "keywords": ["node.js", "express", "mongodb", "restapi"],
   "author": "",
   "license": "ISC",
   "dependencies": {
